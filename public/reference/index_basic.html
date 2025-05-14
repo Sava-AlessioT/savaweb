@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAVA | AI-Powered Robotics for Manufacturing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Posterama';
+            src: url('assets/posterama-regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Posterama';
+            src: url('assets/posterama-bold.otf') format('opentype');
+            font-weight: bold;
+            font-style: normal;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        posterama: ['Posterama', 'sans-serif'],
+                        vt323: ['VT323', 'monospace'],
+                        mono: ['Roboto Mono', 'monospace'],
+                    },
+                    borderRadius: {
+                        'sm': '5px',
+                    },
+                    animation: {
+                        'scan': 'scan 2s ease-in-out infinite',
+                        'blink': 'blink 1.5s infinite',
+                        'glitch': 'glitch 3s infinite',
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(100%)' },
+                        },
+                        blink: {
+                            '0%, 100%': { opacity: 1 },
+                            '50%': { opacity: 0 },
+                        },
+                        glitch: {
+                            '0%, 100%': { transform: 'translate(0)' },
+                            '33%': { transform: 'translate(-5px, 2px)' },
+                            '66%': { transform: 'translate(5px, -2px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-black text-white font-posterama">
+    <!-- Noise Overlay -->
+    <div class="fixed inset-0 noise-overlay opacity-5 pointer-events-none"></div>
+    
+    <!-- Navigation Bar (no background color now) -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 py-4 px-6">
+        <div class="container mx-auto flex justify-center md:grid md:grid-cols-3 items-center">
+            <!-- Logo (centered on mobile, left-aligned on desktop) -->
+            <a href="#" class="flex items-center text-white md:col-span-1">
+                <span class="text-2xl font-posterama tracking-widest">SAVA</span>
+            </a>
+            
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex space-x-8 items-center justify-center md:col-span-1">
+                <a href="#what-we-build" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">HOME</a>
+                <a href="#vision" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">VISION</a>
+                <a href="#problem" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">PROBLEM</a>
+                <a href="#solution" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">SOLUTION</a>
+                <a href="#reserve" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">RESERVE</a>
+                <a href="contact.html" class="nav-link text-white font-mono text-sm tracking-widest hover:text-white/70 transition-all">CONTACT</a>
+            </div>
+            
+            <!-- Empty column for desktop grid layout -->
+            <div class="hidden md:block md:col-span-1"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video Background that extends under navbar -->
+    <section id="what-we-build" class="relative overflow-hidden" style="height: calc(100vh - 72px);">
+        <!-- Full width video background -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-black/60 z-10"></div> <!-- Overlay to darken video -->
+            <video class="absolute w-full h-full object-cover" autoplay loop muted playsinline defaultMuted webkit-playsinline preload="metadata" id="heroVideo">
+                <source src="assets/herofinalfr.mp4" type="video/mp4">
+                <source src="assets/video.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+            
+            <!-- Noise overlay for aesthetic -->
+            <div class="absolute inset-0 z-20 noise-overlay opacity-5"></div>
+            
+            <!-- Scanline effect -->
+            <div class="absolute inset-0 z-20 scanline-effect"></div>
+            
+            <!-- Fallback image if video fails to load -->
+            <img src="fallback-bg.jpg" alt="Background" class="absolute inset-0 w-full h-full object-cover hidden video-fallback">
+        </div>
+        
+        <!-- Centered content -->
+        <div class="container relative z-30 mx-auto h-full flex items-center justify-center px-6">
+            <div class="text-center max-w-4xl">
+                <div class="flex items-center justify-center mb-8">
+                    <p class="text-s font-mono uppercase tracking-widest flex items-center">BACKED BY <img src="assets/white_yc_logo.svg" alt="Y" class="h-6 mx-3"> COMBINATOR</p>
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6">
+                    INTELLIGENT MANUFACTURING ROBOTS
+                </h1>
+                
+                <div class="h-1 w-32 bg-white mx-auto mb-8"></div>
+                
+                <p class="text-2xl font-mono mb-12 typing-text mx-auto">
+                    SAVA IS BUILDING THE FIRST PLUG-AND-PLAY PRESS BRAKE OPERATOR
+                </p>
+                
+                <div class="flex justify-center">
+                    <a href="contact.html" class="bg-white text-black px-10 py-4 font-bold tracking-widest hover:bg-gray-200 transition-all rounded-sm">
+                        LEARN MORE
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Corner brackets for aesthetic -->
+        <div class="absolute top-8 left-8 w-16 h-16 z-30 border-t-2 border-l-2 border-white/50 pointer-events-none rounded-tl-sm"></div>
+        <div class="absolute top-8 right-8 w-16 h-16 z-30 border-t-2 border-r-2 border-white/50 pointer-events-none rounded-tr-sm"></div>
+        <div class="absolute bottom-8 left-8 w-16 h-16 z-30 border-b-2 border-l-2 border-white/50 pointer-events-none rounded-bl-sm"></div>
+        <div class="absolute bottom-8 right-8 w-16 h-16 z-30 border-b-2 border-r-2 border-white/50 pointer-events-none rounded-br-sm"></div>
+    </section>
+
+    <!-- Vision Section -->
+    <section id="vision" class="py-20 relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block px-2 py-1 text-xs font-mono tracking-widest mb-4">OUR VISION</div>
+                <div class="h-0.5 mx-auto bg-black mb-4 vision-line"></div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-wider vision-heading px-2">THE NEXT MANUFACTURING WORKFORCE</h2>
+                <div class="h-0.5 mx-auto bg-black mb-8 vision-line"></div>
+                <div class="max-w-5xl mx-auto">
+                    <p class="text-xl italic text-center font-mono">"We envision a world where American manufacturing is fully automated, where humans are liberated from tedious labor to focus on creativity, humanity, and exploration."</p>
+                    <p class="text-center mt-4 font-bold">— Founders Jakob, Alessio, & Vedic</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Background elements -->
+        <div class="absolute inset-0 z-0">
+            <!-- Grid Background -->
+            <div class="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
+            <!-- Abstract geometric shapes for visual interest -->
+            <div class="absolute top-40 left-20 w-60 h-60 border border-black/20 rounded-full"></div>
+            <div class="absolute bottom-40 right-40 w-80 h-80 border border-black/20 transform rotate-12 rounded-sm"></div>
+        </div>
+    </section>
+
+    <!-- Add this JavaScript to handle video fallback -->
+    <script>
+        // Show fallback image if video fails to load
+        document.querySelector('video').addEventListener('error', function() {
+            document.querySelector('.video-fallback').classList.remove('hidden');
+        });
+    </script>
+
+    <!-- 3. Problem Section -->
+    <section id="problem" class="py-20 relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block px-2 py-1 text-xs font-mono tracking-widest mb-4">THE PROBLEM</div>
+                <div class="h-0.5 mx-auto bg-black mb-4 problem-line"></div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-wider problem-heading px-2">NO ONE (OR THING) TO OPERATE PRESS BRAKES</h2>
+                <div class="h-0.5 mx-auto bg-black mb-8 problem-line"></div>
+            </div>
+
+            <div class="max-w-5xl mx-auto">
+                <div class="space-y-10">
+                    <!-- Problem Point 1 (Workforce) -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-6">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-2 border-black bg-white text-black font-bold text-xl">1</div>
+                        </div>
+                        <div>
+                            <p class="text-lg font-mono">Critical shortage of skilled manufacturing operators.</p>
+                        </div>
+                    </div>
+                    
+        
+                    
+                    <!-- Problem Point 3 (Automation Cost) -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-6">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-2 border-black bg-white text-black font-bold text-xl">2</div>
+                        </div>
+                        <div>
+                            <p class="text-lg font-mono">Automation cells require shops to replace existing equipment.</p>
+                        </div>
+                    </div>
+
+                    <!-- Problem Point 4 (Programming) -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-6">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-2 border-black bg-white text-black font-bold text-xl">3</div>
+                        </div>
+                        <div>
+                            <p class="text-lg font-mono">Tedious programming causes shops to turn down profitable jobs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Background elements -->
+        <div class="absolute inset-0 z-0">
+            <!-- Abstract geometric shapes -->
+            <div class="absolute bottom-0 left-0 w-64 h-64 border border-black/20 rounded-full"></div>
+            <div class="absolute top-20 right-20 w-40 h-40 border border-black/20 transform rotate-45 rounded-sm"></div>
+        </div>
+    </section>
+
+    <!-- 4. Why Our Solution Section -->
+    <section id="solution" class="py-20 relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <!-- Section title -->
+            <div class="text-center mb-16">
+                <div class="inline-block px-2 py-1 text-xs font-mono tracking-widest mb-4">OUR SOLUTION</div>
+                <div class="h-0.5 mx-auto bg-black mb-4 solution-line"></div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-wider solution-heading px-2">INTELLIGENT MANUFACTURING ROBOTS</h2>
+                <div class="h-0.5 mx-auto bg-black mb-8 solution-line"></div>
+                <p class="text-base font-mono mb-8 px-4">Simply provide the CAD & quantity — the robot does the rest<span class="inline-block animate-blink">|</span></p>
+            </div>
+            
+            <!-- Content grid -->
+            <div class="grid md:grid-cols-1 gap-16 items-start">
+                <!-- Right column with workflow visualization -->
+                <div class="max-w-4xl mx-auto w-full">
+                    <div class="p-6 rounded-sm relative">
+                        <!-- Title above video -->
+                        <!--<h3 class="text-xl font-bold mb-8 text-center">HOW IT WORKS</h3>-->
+                        
+                        <!-- Video container taking up the rest of the space -->
+                        <div class="relative w-full overflow-hidden rounded-sm border border-white/30">
+                            <div class="aspect-video">
+                                <video class="absolute w-full h-full object-cover" autoplay loop muted playsinline preload="auto">
+                                    <source src="assets/howitworks.mp4" type="video/mp4">
+                                    <source src="assets/howitworks.webm" type="video/webm">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <!-- Scanline effect -->
+                                <div class="absolute inset-0 scanline-effect opacity-20"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Background elements -->
+        <div class="absolute inset-0 z-0">
+            <!-- Grid Background -->
+            <div class="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reserve" class="py-20 relative overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block px-2 py-1 text-xs font-mono tracking-widest mb-4">RESERVE YOUR ROBOT</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 tracking-wider reserve-heading px-2">LIMITED AVAILABILITY FOR 2025</h2>
+                <p class="text-xl font-mono mb-12 max-w-3xl mx-auto">
+                    The first SAVA press brake operator ships July 4th, 2026
+                </p>
+                
+                <div class="flex justify-center">
+                    <a href="mailto:founders@savarobotics.com?subject=Robot%20Reservation%20Inquiry&body=Hello%20SAVA%20Team%2C%0A%0AI%20am%20interested%20in%20reserving%20a%20SAVA%20robot.%20Please%20contact%20me%20with%20more%20information.%0A%0AName%3A%20%0ACompany%3A%20%0AEmail%3A%20%0APhone%20(optional)%3A%20%0A%0AThank%20you!" class="bg-white text-black px-10 py-4 font-bold tracking-widest hover:bg-gray-200 transition-all rounded-sm flex items-center space-x-2">
+                        <span>RESERVE A ROBOT</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Background elements -->
+        <div class="absolute inset-0 z-0">
+            
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <span class="text-2xl font-posterama tracking-widest">SAVA</span>
+                    </div>
+                    <p class="font-mono text-white/70 mb-6">
+                        <a href="mailto:founders@savarobotics.com" class="hover:text-white transition-colors">founders@savarobotics.com</a>
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.linkedin.com/company/savarobotics" target="_blank" rel="noopener noreferrer" class="border border-white/50 w-10 h-10 flex items-center justify-center hover:bg-white hover:text-black transition-all rounded-sm">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M6 9H2V21H6V9Z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="4" cy="4" r="2" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </a>
+                        <a href="https://x.com/savarobotics" target="_blank" rel="noopener noreferrer" class="border border-white/50 w-10 h-10 flex items-center justify-center hover:bg-white hover:text-black transition-all rounded-sm">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 4C22 4 21.3 6.1 20 7.4C21.6 17.4 10.6 24.7 2 19C4.2 19.1 6.4 18.4 8 17C3 15.5 0.5 9.6 3 5C5.2 7.6 8.6 9.1 12 9C11.1 4.8 16 2.4 19 5.2C20.1 5.2 22 4 22 4Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.youtube.com/@SavaRobotics" target="_blank" rel="noopener noreferrer" class="border border-white/50 w-10 h-10 flex items-center justify-center hover:bg-white hover:text-black transition-all rounded-sm">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.54 6.42C22.4212 5.94541 22.1793 5.51057 21.8387 5.15941C21.498 4.80824 21.0708 4.55318 20.6 4.42C18.88 4 12 4 12 4C12 4 5.12002 4 3.40002 4.46C2.92927 4.59318 2.50209 4.84824 2.16142 5.19941C1.82076 5.55057 1.57891 5.98541 1.46002 6.46C1.14524 8.20556 0.991258 9.97631 1.00002 11.75C0.988802 13.537 1.14279 15.3213 1.46002 17.08C1.59098 17.5398 1.83833 17.9581 2.17817 18.2945C2.518 18.6308 2.9394 18.8738 3.40002 19C5.12002 19.46 12 19.46 12 19.46C12 19.46 18.88 19.46 20.6 19C21.0708 18.8668 21.498 18.6118 21.8387 18.2606C22.1793 17.9094 22.4212 17.4746 22.54 17C22.8524 15.2676 23.0063 13.5103 23 11.75C23.0112 9.96295 22.8572 8.17862 22.54 6.42Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9.75 15.02L15.5 11.75L9.75 8.48001V15.02Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-base mb-4 tracking-wider">SUBSCRIBE FOR UPDATES</h3>
+                    <!-- Replace "yourformid" with your actual form ID after creating one at https://formspree.io -->
+                    <form class="flex" action="https://formspree.io/f/yourformid" method="POST">
+                        <input type="email" name="email" placeholder="Your email address" class="bg-black border border-white/50 px-4 py-2 w-full focus:outline-none focus:ring-2 focus:border-white text-white font-mono rounded-l-sm" required>
+                        <button type="submit" class="bg-white text-black px-4 py-2 font-bold hover:bg-gray-200 transition-all rounded-r-sm">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/20 mt-12 pt-8 flex justify-center">
+                <p class="font-mono text-white/50 text-sm">© 2025 SAVA ROBOTICS // ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Navbar functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Change navbar style on scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Highlight active section in navbar
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Set home link as active by default when page loads
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === '#what-we-build') {
+                    link.classList.add('active');
+                }
+            });
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Set line widths based on heading widths
+            function adjustLineWidths() {
+                // Get viewport width
+                const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                const maxWidth = viewportWidth - 40; // Add some padding
+                
+                // Vision section
+                const visionHeading = document.querySelector('.vision-heading');
+                const visionLines = document.querySelectorAll('.vision-line');
+                const visionWidth = Math.min(visionHeading.offsetWidth, maxWidth);
+                visionLines.forEach(line => {
+                    line.style.width = `${visionWidth}px`;
+                });
+
+                // Problem section
+                const problemHeading = document.querySelector('.problem-heading');
+                const problemLines = document.querySelectorAll('.problem-line');
+                const problemWidth = Math.min(problemHeading.offsetWidth, maxWidth);
+                problemLines.forEach(line => {
+                    line.style.width = `${problemWidth}px`;
+                });
+
+                // Solution section
+                const solutionHeading = document.querySelector('.solution-heading');
+                const solutionLines = document.querySelectorAll('.solution-line');
+                const solutionWidth = Math.min(solutionHeading.offsetWidth, maxWidth);
+                solutionLines.forEach(line => {
+                    line.style.width = `${solutionWidth}px`;
+                });
+            }
+
+            // Adjust on page load and resize
+            adjustLineWidths();
+            window.addEventListener('resize', adjustLineWidths);
+        });
+
+        // Optimize video loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lazy load videos based on viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Get the video element
+                    const video = entry.target;
+                    
+                    // If element is in view
+                    if (entry.isIntersecting) {
+                        // Check if video has data-src (hasn't been loaded yet)
+                        const sources = video.querySelectorAll('source');
+                        sources.forEach(source => {
+                            if (source.dataset.src) {
+                                source.src = source.dataset.src;
+                                source.removeAttribute('data-src');
+                            }
+                        });
+                        
+                        // Load the video
+                        video.load();
+                        if (!video.paused) {
+                            video.play().catch(e => console.log("Auto-play prevented:", e));
+                        }
+                        
+                        // Stop observing once loaded
+                        observer.unobserve(video);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            });
+            
+            // For browsers that support it, use native lazy loading
+            if ('loading' in HTMLImageElement.prototype) {
+                const videos = document.querySelectorAll('video[data-src]');
+                videos.forEach(video => {
+                    video.src = video.dataset.src;
+                    video.removeAttribute('data-src');
+                });
+            } else {
+                // Observe videos that should be lazy loaded
+                const videos = document.querySelectorAll('video');
+                videos.forEach(video => observer.observe(video));
+            }
+        });
+
+        // Optimize video playback
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+            // Reduce quality for mobile devices
+            if (window.innerWidth < 768) {
+                video.setAttribute('playsinline', '');
+                
+                // If we have a lower quality version available
+                const mobileSources = video.querySelectorAll('source[data-mobile-src]');
+                mobileSources.forEach(source => {
+                    source.src = source.dataset.mobileSrc;
+                });
+                
+                // Reload if needed
+                if (mobileSources.length > 0) {
+                    video.load();
+                }
+            }
+        });
+
+        // Handle newsletter form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.querySelector('form[action^="https://formspree.io"]');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const formData = new FormData(newsletterForm);
+                    const formUrl = newsletterForm.getAttribute('action');
+                    
+                    // Change button to loading state
+                    const submitButton = newsletterForm.querySelector('button[type="submit"]');
+                    const originalButtonContent = submitButton.innerHTML;
+                    submitButton.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>`;
+                    
+                    fetch(formUrl, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Success
+                        newsletterForm.innerHTML = `<div class="bg-white/10 border border-white/20 w-full p-4 text-white font-mono">Thanks for subscribing!</div>`;
+                    })
+                    .catch(error => {
+                        // Error
+                        submitButton.innerHTML = originalButtonContent;
+                        const errorEl = document.createElement('div');
+                        errorEl.className = 'bg-red-500/20 border border-red-500/30 w-full p-2 text-white font-mono text-sm mt-2';
+                        errorEl.innerHTML = 'Something went wrong. Please try again.';
+                        newsletterForm.appendChild(errorEl);
+                        
+                        // Remove error message after 3 seconds
+                        setTimeout(() => {
+                            errorEl.remove();
+                        }, 3000);
+                    });
+                });
+            }
+        });
+
+        // Handle video autoplay for Safari mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                // Force video play on page load
+                video.play().catch(function(error) {
+                    // Add click-to-play functionality if autoplay fails
+                    video.addEventListener('click', function() {
+                        video.play();
+                    });
+                });
+
+                // Try to play video when it becomes visible
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            video.play().catch(function(error) {
+                                console.log("Video autoplay failed:", error);
+                            });
+                        }
+                    });
+                });
+                
+                observer.observe(video);
+
+                // Handle page visibility changes
+                document.addEventListener('visibilitychange', function() {
+                    if (document.visibilityState === 'visible') {
+                        video.play().catch(function(error) {
+                            console.log("Video autoplay failed:", error);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
