@@ -1,11 +1,70 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useRef, useEffect, useState } from "react";
 
+// Import shadcn components
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { 
+  NavigationMenu, 
+  NavigationMenuContent, 
+  NavigationMenuItem, 
+  NavigationMenuLink, 
+  NavigationMenuList, 
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import Link from "next/link";
+
 export default function Home() {
+  const horizontalRef = useRef(null);
+
+  useEffect(() => {
+    // Only run this on client side
+    if (typeof window !== "undefined") {
+      // Add custom styles for the horizontal scrolling sections
+      const style = document.createElement('style');
+      style.innerHTML = `
+        .horizontal-section {
+          overflow: hidden;
+        }
+        .panels-container {
+          display: flex;
+          width: 300%; /* 3 panels, each 100% width */
+          height: 100vh;
+        }
+        .panel {
+          width: 100%;
+          height: 100%;
+        }
+      `;
+      document.head.appendChild(style);
+
+      const sections = document.querySelectorAll('.panel');
+      const container = document.querySelector('.panels-container');
+      
+      if (container && sections.length) {
+        const handleScroll = () => {
+          // Only execute if the element is in viewport
+          const rect = container.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            const scrollProgress = (window.scrollY - rect.top) / (rect.height - window.innerHeight);
+            const translateX = Math.min(scrollProgress * 100, 100) * -1; // Max 100% translation
+            container.style.transform = `translateX(${translateX}%)`;
+          }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }
+    }
+  }, []);
+
   return (
     <div className="bg-black text-white min-h-screen font-sans">
       {/* Navigation Bar */}
@@ -15,14 +74,52 @@ export default function Home() {
             <span className="text-2xl tracking-widest">SAVA</span>
           </a>
           
-          <div className="hidden md:flex space-x-8 items-center justify-center md:col-span-1">
-            <a href="#what-we-build" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">HOME</a>
-            <a href="#vision" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">VISION</a>
-            <a href="#problem" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">PROBLEM</a>
-            <a href="#solution" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">SOLUTION</a>
-            <a href="#reserve" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">RESERVE</a>
-            <a href="contact.html" className="text-white text-sm tracking-widest hover:text-white/70 transition-all">CONTACT</a>
-          </div>
+          <NavigationMenu className="hidden md:flex md:col-span-1">
+            <NavigationMenuList className="flex space-x-8 items-center justify-center">
+              <NavigationMenuItem>
+                <Link href="#what-we-build" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    HOME
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="#vision" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    VISION
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="#problem" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    PROBLEM
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="#solution" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    SOLUTION
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="#reserve" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    RESERVE
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="contact.html" legacyBehavior passHref>
+                  <NavigationMenuLink className="text-white text-sm tracking-widest hover:text-white/70 transition-all hover:bg-transparent">
+                    CONTACT
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
           
           <div className="hidden md:block md:col-span-1"></div>
         </div>
@@ -33,7 +130,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/60 z-10"></div>
           <video className="absolute w-full h-full object-cover" autoPlay loop muted playsInline defaultMuted webkit-playsinline preload="metadata">
-            <source src="/herofinalfr.mp4" type="video/mp4" />
+            <source src="/video.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           
@@ -64,10 +161,10 @@ export default function Home() {
               transition={{ duration: 1.2, delay: 0.2, type: "spring", stiffness: 70 }}
               className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6"
             >
-              INTELLIGENT MANUFACTURING ROBOTS
+              ROBOT OPERATORS FOR SHEET METAL
             </motion.h1>
             
-            <div className="h-1 w-32 bg-white mx-auto mb-8"></div>
+            <Separator className="bg-white h-1 w-32 mx-auto mb-8" />
             
             <motion.p 
               initial={{ opacity: 0, y: 40 }}
@@ -84,9 +181,9 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 1.1, type: "spring", stiffness: 100 }}
               className="flex justify-center"
             >
-              <a href="contact.html" className="bg-white text-black px-10 py-4 font-bold tracking-widest hover:bg-gray-200 transition-all rounded-sm">
-                LEARN MORE
-              </a>
+              <Button variant="secondary" size="lg" asChild className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 font-bold tracking-widest">
+                <a href="contact.html">LEARN MORE</a>
+              </Button>
             </motion.div>
 
             <motion.div
@@ -125,195 +222,220 @@ export default function Home() {
         <div className="absolute bottom-8 right-8 w-16 h-16 z-30 border-b-2 border-r-2 border-white/50 pointer-events-none rounded-br-sm"></div>
       </section>
 
-      {/* Vision Section */}
-      <section id="vision" className="py-20 relative overflow-hidden bg-black">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">OUR VISION</div>
-            <div className="h-0.5 mx-auto bg-white mb-4 w-[500px] max-w-full"></div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
-            >
-              THE NEXT MANUFACTURING WORKFORCE
-            </motion.h2>
-            <div className="h-0.5 mx-auto bg-white mb-8 w-[500px] max-w-full"></div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-5xl mx-auto backdrop-blur-lg bg-black/40 p-8 rounded-lg border border-white/10"
-            >
-              <p className="text-xl italic text-center">"We envision a world where American manufacturing is fully automated, where humans are liberated from tedious labor to focus on creativity, humanity, and exploration."</p>
-              <p className="text-center mt-4 font-bold">— Founders Jakob, Alessio, & Vedic</p>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Background elements */}
-        <div className="absolute inset-0 z-0">
-          {/* Grid Background */}
-          <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
-          {/* Abstract geometric shapes for visual interest */}
-          <div className="absolute top-40 left-20 w-60 h-60 border border-white/20 rounded-full"></div>
-          <div className="absolute bottom-40 right-40 w-80 h-80 border border-white/20 transform rotate-12 rounded-sm"></div>
-        </div>
-
-        <motion.div 
-          initial={{ y: -100 }}
-          animate={{ y: "100vh" }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          className="absolute left-0 right-0 h-1 bg-white/20 blur-sm z-0"
-        />
-      </section>
-
-      {/* Problem Section */}
-      <section id="problem" className="py-20 relative overflow-hidden bg-black">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">THE PROBLEM</div>
-            <div className="h-0.5 mx-auto bg-white mb-4 w-[600px] max-w-full"></div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
-            >
-              NO ONE (OR THING) TO OPERATE PRESS BRAKES
-            </motion.h2>
-            <div className="h-0.5 mx-auto bg-white mb-8 w-[600px] max-w-full"></div>
-          </div>
-
-          <div className="max-w-5xl mx-auto">
-            <motion.div 
-              className="space-y-10"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.3
-                  }
-                }
-              }}
-            >
-              {/* Problem Point 1 */}
-              <motion.div 
-                className="flex items-start"
-                variants={{
-                  hidden: { opacity: 0, x: -20 },
-                  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                }}
-              >
-                <div className="flex-shrink-0 mr-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">1</div>
-                </div>
-                <div>
-                  <p className="text-lg">Critical shortage of skilled manufacturing operators.</p>
-                </div>
-              </motion.div>
-              
-              {/* Problem Point 2 */}
-              <motion.div 
-                className="flex items-start"
-                variants={{
-                  hidden: { opacity: 0, x: -20 },
-                  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                }}
-              >
-                <div className="flex-shrink-0 mr-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">2</div>
-                </div>
-                <div>
-                  <p className="text-lg">Automation cells require shops to replace existing equipment.</p>
-                </div>
-              </motion.div>
-
-              {/* Problem Point 3 */}
-              <motion.div 
-                className="flex items-start"
-                variants={{
-                  hidden: { opacity: 0, x: -20 },
-                  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                }}
-              >
-                <div className="flex-shrink-0 mr-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">3</div>
-                </div>
-                <div>
-                  <p className="text-lg">Tedious programming causes shops to turn down profitable jobs.</p>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Background elements */}
-        <div className="absolute inset-0 z-0">
-          {/* Abstract geometric shapes */}
-          <div className="absolute bottom-0 left-0 w-64 h-64 border border-white/20 rounded-full"></div>
-          <div className="absolute top-20 right-20 w-40 h-40 border border-white/20 transform rotate-45 rounded-sm"></div>
-        </div>
-      </section>
-
-      {/* Solution Section */}
-      <section id="solution" className="py-20 relative overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-          {/* Section title */}
-          <div className="text-center mb-16">
-            <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">OUR SOLUTION</div>
-            <div className="h-0.5 mx-auto bg-white mb-4 w-[600px] max-w-full"></div>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
-            >
-              INTELLIGENT MANUFACTURING ROBOTS
-            </motion.h2>
-            <div className="h-0.5 mx-auto bg-white mb-8 w-[600px] max-w-full"></div>
-            <p className="text-base mb-8 px-4">
-              Simply provide the CAD & quantity — the robot does the rest
-              <span className="inline-block animate-pulse ml-1">|</span>
-            </p>
-          </div>
-          
-          {/* Content grid */}
-          <div className="grid md:grid-cols-1 gap-16 items-start">
-            {/* Video with animation */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="max-w-4xl mx-auto w-full"
-            >
-              <div className="p-6 rounded-sm relative">
-                <div className="relative w-full overflow-hidden rounded-sm border border-white/30">
-                  <div className="aspect-video">
-                    <video className="absolute w-full h-full object-cover" autoPlay loop muted playsInline preload="auto">
-                      <source src="/howitworks.mp4" type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                    <div className="absolute inset-0 opacity-20"></div>
-                  </div>
+      {/* Horizontal Scrolling Sections */}
+      <section ref={horizontalRef} className="horizontal-section relative overflow-hidden" style={{ height: "300vh" }}>
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="panels-container">
+            {/* Vision Panel */}
+            <div id="vision" className="panel bg-black relative">
+              <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center">
+                <div className="text-center mb-16">
+                  <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">OUR VISION</div>
+                  <Separator className="bg-white h-0.5 mx-auto mb-4 w-[500px] max-w-full" />
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                    className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
+                  >
+                    THE NEXT MANUFACTURING WORKFORCE
+                  </motion.h2>
+                  <Separator className="bg-white h-0.5 mx-auto mb-8 w-[500px] max-w-full" />
+                  
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                  >
+                    <Card className="max-w-5xl mx-auto bg-black/40 backdrop-blur-lg border-white/10">
+                      <CardContent className="p-8">
+                        <p className="text-xl italic text-center text-white">"We envision a world where American manufacturing is fully automated, where humans are liberated from tedious labor to focus on creativity, humanity, and exploration."</p>
+                        <p className="text-center mt-4 font-bold text-white">— Founders Jakob, Alessio, & Vedic</p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 </div>
               </div>
-            </motion.div>
+              
+              {/* Background elements */}
+              <div className="absolute inset-0 z-0">
+                {/* Grid Background */}
+                <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
+                {/* Abstract geometric shapes for visual interest */}
+                <div className="absolute top-40 left-20 w-60 h-60 border border-white/20 rounded-full"></div>
+                <div className="absolute bottom-40 right-40 w-80 h-80 border border-white/20 transform rotate-12 rounded-sm"></div>
+              </div>
+              
+              <motion.div 
+                initial={{ y: -100 }}
+                animate={{ y: "100vh" }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                className="absolute left-0 right-0 h-1 bg-white/20 blur-sm z-0"
+              />
+            </div>
+            
+            {/* Problem Panel */}
+            <div id="problem" className="panel bg-black relative">
+              <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center">
+                <div className="text-center mb-16">
+                  <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">THE PROBLEM</div>
+                  <Separator className="bg-white h-0.5 mx-auto mb-4 w-[600px] max-w-full" />
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                    className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
+                  >
+                    NO ONE (OR THING) TO OPERATE PRESS BRAKES
+                  </motion.h2>
+                  <Separator className="bg-white h-0.5 mx-auto mb-8 w-[600px] max-w-full" />
+                </div>
+
+                <div className="max-w-5xl mx-auto">
+                  <motion.div 
+                    className="space-y-10"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{
+                      visible: {
+                        transition: {
+                          staggerChildren: 0.3
+                        }
+                      }
+                    }}
+                  >
+                    {/* Problem Point 1 */}
+                    <motion.div 
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
+                      }}
+                    >
+                      <Card className="bg-transparent border-none shadow-none">
+                        <CardContent className="p-0">
+                          <div className="flex items-start">
+                            <div className="flex-shrink-0 mr-6">
+                              <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">1</div>
+                            </div>
+                            <div>
+                              <p className="text-lg text-white">Critical shortage of skilled manufacturing operators.</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                    
+                    {/* Problem Point 2 */}
+                    <motion.div 
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
+                      }}
+                    >
+                      <Card className="bg-transparent border-none shadow-none">
+                        <CardContent className="p-0">
+                          <div className="flex items-start">
+                            <div className="flex-shrink-0 mr-6">
+                              <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">2</div>
+                            </div>
+                            <div>
+                              <p className="text-lg text-white">Automation cells require shops to replace existing equipment.</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+
+                    {/* Problem Point 3 */}
+                    <motion.div 
+                      variants={{
+                        hidden: { opacity: 0, x: -20 },
+                        visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
+                      }}
+                    >
+                      <Card className="bg-transparent border-none shadow-none">
+                        <CardContent className="p-0">
+                          <div className="flex items-start">
+                            <div className="flex-shrink-0 mr-6">
+                              <div className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-white bg-black text-white font-bold text-xl">3</div>
+                            </div>
+                            <div>
+                              <p className="text-lg text-white">Tedious programming causes shops to turn down profitable jobs.</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Background elements */}
+              <div className="absolute inset-0 z-0">
+                {/* Abstract geometric shapes */}
+                <div className="absolute bottom-0 left-0 w-64 h-64 border border-white/20 rounded-full"></div>
+                <div className="absolute top-20 right-20 w-40 h-40 border border-white/20 transform rotate-45 rounded-sm"></div>
+              </div>
+            </div>
+            
+            {/* Solution Panel */}
+            <div id="solution" className="panel bg-black relative">
+              <div className="container mx-auto px-6 relative z-10 h-full flex flex-col justify-center">
+                {/* Section title */}
+                <div className="text-center mb-16">
+                  <div className="inline-block px-2 py-1 text-xs tracking-widest mb-4">OUR SOLUTION</div>
+                  <Separator className="bg-white h-0.5 mx-auto mb-4 w-[600px] max-w-full" />
+                  <motion.h2 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    viewport={{ once: true }}
+                    className="text-3xl md:text-4xl font-bold mb-4 tracking-wider px-2"
+                  >
+                    ROBOT OPERATORS FOR SHEET METAL
+                  </motion.h2>
+                  <Separator className="bg-white h-0.5 mx-auto mb-8 w-[600px] max-w-full" />
+                  <p className="text-base mb-8 px-4 text-white">
+                    Simply provide the CAD & quantity — the robot does the rest
+                    <span className="inline-block animate-pulse ml-1">|</span>
+                  </p>
+                </div>
+                
+                {/* Content grid */}
+                <div className="grid md:grid-cols-1 gap-8 items-start">
+                  {/* Video with animation */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="max-w-4xl mx-auto w-full"
+                  >
+                    <Card className="bg-transparent p-6 border border-white/30 rounded-sm">
+                      <CardContent className="p-0">
+                        <div className="aspect-video relative overflow-hidden">
+                          <video className="absolute w-full h-full object-cover" autoPlay loop muted playsInline preload="auto">
+                            <source src="/howitworks.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                          <div className="absolute inset-0 opacity-20"></div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                </div>
+              </div>
+              
+              {/* Background elements */}
+              <div className="absolute inset-0 z-0">
+                <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        {/* Background elements */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none"></div>
         </div>
       </section>
 
@@ -327,11 +449,11 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
               viewport={{ once: true }}
-              className="text-3xl md:text-4xl font-bold mb-8 tracking-wider px-2"
+              className="text-3xl md:text-4xl font-bold mb-8 tracking-wider px-2 text-white"
             >
               LIMITED AVAILABILITY FOR 2025
             </motion.h2>
-            <p className="text-xl mb-12 max-w-3xl mx-auto">
+            <p className="text-xl mb-12 max-w-3xl mx-auto text-white">
               The first SAVA press brake operator ships July 4th, 2026
             </p>
             
@@ -344,13 +466,14 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex justify-center mt-10"
             >
-              <a href="mailto:founders@savarobotics.com?subject=Robot%20Reservation%20Inquiry" 
-                className="bg-white text-black px-10 py-4 font-bold tracking-widest hover:bg-gray-200 transition-all rounded-sm flex items-center space-x-2">
-                <span>RESERVE A ROBOT</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-2">
-                  <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </a>
+              <Button variant="secondary" size="lg" asChild className="bg-white text-black hover:bg-gray-200 rounded-sm px-10 py-7 font-bold tracking-widest">
+                <a href="mailto:founders@savarobotics.com?subject=Robot%20Reservation%20Inquiry" className="flex items-center">
+                  <span>RESERVE A ROBOT</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-2">
+                    <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </a>
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -362,7 +485,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <div className="flex items-center mb-6">
-                <span className="text-2xl tracking-widest">SAVA</span>
+                <span className="text-2xl tracking-widest text-white">SAVA</span>
               </div>
               <p className="text-white/70 mb-6">
                 <a href="mailto:founders@savarobotics.com" className="hover:text-white transition-colors">founders@savarobotics.com</a>
@@ -390,14 +513,20 @@ export default function Home() {
             </div>
             
             <div>
-              <h3 className="text-base mb-4 tracking-wider">SUBSCRIBE FOR UPDATES</h3>
+              <h3 className="text-base mb-4 tracking-wider text-white">SUBSCRIBE FOR UPDATES</h3>
               <form className="flex">
-                <input type="email" name="email" placeholder="Your email address" className="bg-black border border-white/50 px-4 py-2 w-full focus:outline-none focus:ring-2 focus:border-white text-white rounded-l-sm" required />
-                <button type="submit" className="bg-white text-black px-4 py-2 font-bold hover:bg-gray-200 transition-all rounded-r-sm">
+                <Input 
+                  type="email" 
+                  name="email" 
+                  placeholder="Your email address" 
+                  className="bg-black border border-white/50 px-4 py-2 w-full focus:outline-none focus:ring-2 focus:border-white text-white rounded-l-sm rounded-r-none" 
+                  required 
+                />
+                <Button type="submit" variant="default" className="bg-white text-black hover:bg-gray-200 rounded-l-none rounded-r-sm px-4 py-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14 5L21 12M21 12L14 19M21 12H3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </button>
+                </Button>
               </form>
             </div>
           </div>
@@ -446,32 +575,33 @@ function ReservationCountdown() {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: 0.2 }}
-      className="bg-black border border-white/20 p-8 mb-12 max-w-2xl mx-auto relative"
     >
-      <div className="absolute -top-3 left-6 bg-black px-3 text-gray-400 text-sm">
-        PRODUCTION TIMELINE
-      </div>
-      
-      <div className="text-center">
-        <p className="text-gray-400 mb-6">The first SAVA ROBOTICS press brake operator ships:</p>
-        <div className="text-3xl font-bold text-white mb-2">JULY 4, 2026</div>
-        <div className="h-px bg-white/20 w-1/2 mx-auto my-6"></div>
-        
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <div className="text-4xl text-white mb-1">{timeLeft.months.toString().padStart(2, '0')}</div>
-            <div className="text-xs text-gray-400">MONTHS</div>
-          </div>
-          <div>
-            <div className="text-4xl text-white mb-1">{timeLeft.days.toString().padStart(2, '0')}</div>
-            <div className="text-xs text-gray-400">DAYS</div>
-          </div>
-          <div>
-            <div className="text-4xl text-white mb-1">{timeLeft.hours.toString().padStart(2, '0')}</div>
-            <div className="text-xs text-gray-400">HOURS</div>
-          </div>
+      <Card className="bg-black border border-white/20 p-8 mb-12 max-w-2xl mx-auto relative text-white">
+        <div className="absolute -top-3 left-6 bg-black px-3 text-gray-400 text-sm">
+          PRODUCTION TIMELINE
         </div>
-      </div>
+        
+        <CardContent className="p-0 text-center">
+          <p className="text-gray-400 mb-6">The first SAVA ROBOTICS press brake operator ships:</p>
+          <div className="text-3xl font-bold text-white mb-2">JULY 4, 2026</div>
+          <Separator className="bg-white/20 h-px w-1/2 mx-auto my-6" />
+          
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-4xl text-white mb-1">{timeLeft.months.toString().padStart(2, '0')}</div>
+              <div className="text-xs text-gray-400">MONTHS</div>
+            </div>
+            <div>
+              <div className="text-4xl text-white mb-1">{timeLeft.days.toString().padStart(2, '0')}</div>
+              <div className="text-xs text-gray-400">DAYS</div>
+            </div>
+            <div>
+              <div className="text-4xl text-white mb-1">{timeLeft.hours.toString().padStart(2, '0')}</div>
+              <div className="text-xs text-gray-400">HOURS</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }
